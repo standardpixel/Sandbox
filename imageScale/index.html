@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Image Scaling</title>
+	<meta name="generator" content="TextMate http://macromates.com/">
+	<meta name="author" content="Eric Gelinas">
+	<!-- Date: 2010-02-18 -->
+</head>
+<body>
+<style>
+	#wrapper {
+		padding-left:25px;
+		position:relative;
+	}
+	#wrapper #control {
+		position:absolute;
+		top:0;
+		left:0;
+		padding:0 10px 10px 10px;
+		border:dotted 1px #fff;
+		background-color:#ddd;
+		width:10px;
+	}
+</style>
+<h1>Image Scaling</h1>
+<div id="wrapper">
+	<div>
+		<a href="http://www.flickr.com/photos/standardpixel/4358173693/" title="Orangy Bourbon by standardpixel, on Flickr"><img src="http://farm5.static.flickr.com/4057/4358173693_2e38b304d7.jpg" id="the_img" width="375" height="500" alt="Orangy Bourbon" /></a>
+	</div>
+	<div id="control" class="vert_slider"></div>
+</div>
+
+<script src="http://yui.yahooapis.com/3.0.0/build/yui/yui-min.js"></script>
+<script>
+// Create a YUI instance and request the slider module and its dependencies
+YUI({combine: true, timeout: 10000}).use("slider", function (Y) {
+
+	var vert_slider,
+	    default_width  = 375,
+	    image          = Y.one('#the_img'),
+	    current_height = image.get('height');
+
+	function getNewWidth(slider_position) {
+		return default_width - slider_position;
+	}
+	
+	function getNewHeight(slider_position) {
+		return current_height / default_width * getNewWidth(slider_position);
+	}
+    
+	// instantiate the vertical Slider.  Use the classic thumb provided with the
+	// Sam skin
+	vert_slider = new Y.Slider({
+	    axis: 'y', // vertical Slider
+	    value: 0, // initial value
+	    railSize: '30em', // range the thumb can move through
+	    thumbImage: 'http://yui.yahooapis.com/3.0.0/build/slider/assets/skins/sam/thumb-classic-y.png'
+	});
+
+	// callback function to display Slider's current value
+	function reportValue(e) {
+		image.set(
+			'width',
+			getNewWidth(e.newVal)
+		);
+		image.set(
+			'height',
+			getNewHeight(e.newVal)
+		);
+	}
+
+	vert_slider.after('valueChange', reportValue);
+
+	// render the slider into the first element with class vert_slider
+	vert_slider.render('.vert_slider');
+
+});
+</script>
+</body>
+</html>

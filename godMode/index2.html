@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>God Mode Example</title>
+	<meta name="generator" content="TextMate http://macromates.com/">
+	<meta name="author" content="Eric Gelinas">
+	
+	<style>
+	#god_mode_indicator{color:#f00;position:absolute;top:0;right:0;}
+	</style>
+	<!-- Date: 2009-10-29 -->
+</head>
+<body>
+
+	<h1>God Mode Example</h1>
+	<input id="text-input" />
+	
+<script type="text/javascript" src="http://yui.yahooapis.com/3.0.0/build/yui/yui-min.js"></script>
+
+<script type="text/javascript">
+	
+	YUI({
+	    modules: {
+	        'gallery-event-konami': {
+	            fullpath: 'http://yui.yahooapis.com/gallery-2009.10.27/build/gallery-event-konami/gallery-event-konami-min.js',
+	            requires: ["node-base","event-custom"],
+	            optional: [],
+	            supersedes: []
+	        }
+	    }
+	}).use('gallery-event-konami', function(Y) {
+		
+			var onKonami = function (e) {
+				console.log(Y.one('#text-input'));
+				Y.one('#text-input').set("value","You're a filthy cheater, and will be rewarded for it");
+				console.log( Y.one('#text-input').on('konami',onKonami ) );
+	    }
+
+	    Y.one('#text-input').on('konami',onKonami );
+
+	});
+	
+</script>
+
+</body>
+</html>

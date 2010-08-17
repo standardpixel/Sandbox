@@ -1,0 +1,211 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Data Table Manager</title>
+
+<style type="text/css">
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:0;
+	padding:0;
+}
+</style>
+
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.7.0/build/fonts/fonts-min.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.7.0/build/paginator/assets/skins/sam/paginator.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.7.0/build/datatable/assets/skins/sam/datatable.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/connection/connection-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/json/json-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/element/element-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/paginator/paginator-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/datasource/datasource-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/datatable/datatable-min.js"></script>
+
+<!--there is no custom header content for this example-->
+
+</head>
+
+<body class=" yui-skin-sam">
+
+
+<h1>Data Table Manager</h1>
+<h2>You will need console.log for this demo. I'm just saying.</h2>
+
+<div class="exampleIntro">
+	<p>This example enables server-side sorting and pagination for data that is
+dynamic in nature.</p>
+			
+</div>
+
+<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+<div id="dynamicdata"></div>
+
+<script type="text/javascript">
+	var DOM = YAHOO.util.Dom, 
+			EVENT = YAHOO.util.Event, 
+			isString = YAHOO.lang.isString, 
+			isObject = YAHOO.lang.isObject,
+			
+			testData = {"recordsReturned":25,"totalRecords":1397,"startIndex":0,"sort":"id","dir":"asc","pageSize":25,
+			"satg_config":{
+			"id" : 'object1',
+			dataSource : {
+					responseSchema : {
+			        resultsList: "records",
+			        fields: [
+			            {key:"id", parser:"number"},
+			            {key:"name"},
+			            {key:"date"},
+			            {key:"price",parser:"number"},
+			            {key:"number",parser:"number"}
+			        ],
+			        metaFields: {
+			            totalRecords: "totalRecords", // Access to value in the server response
+			            satg_config: "satg_config" //Now this is meta
+			        }
+			    }
+					
+				}
+			
+			},
+			"records":[{"id":"0","name":"xmlqoyzgmykrphvyiz","date":"13-Sep-2002","price":"8370","number":"8056","address":"qdfbc","company":"taufrid","desc":"pppzhfhcdqcvbirw","age":"5512","title":"zticbcd","phone":"hvdkltabshgakjqmfrvxo","email":"eodnqepua","zip":"eodnqepua","country":"pdibxicpqipbsgnxyjumsza"},{"id":"1","name":"rbdmbabficcre","date":"10-Sep-2004","price":"3075","number":"3627","address":"oxcm","company":"xyzwzv","desc":"rwndyoedxh","age":"2134","title":"lxxyfgdtdffjce","phone":"zeejvbwy","email":"ldcikhxwfuulaxeedkogpxftb","zip":"ldcikhxwfuulaxeedkogpxftb","country":"pcmobxrdfclcyrx"},{"id":"2","name":"yr","date":"04-Mar-2007","price":"7129","number":"6614","address":"i","company":"gcpvrshftfxxlz","desc":"nyalrdjjl","age":"4728","title":"ddfl","phone":"mnhifzqltvirgiaug","email":"f","zip":"f","country":"epipbmtfsfxetenyedjxzsog"},{"id":"3","name":"bhqggvwolybfdtk","date":"26-Dec-2000","price":"1867","number":"4288","address":"jo","company":"goevufkvmbct","desc":"zhixinabyazbfleozrvovr","age":"3423","title":"b","phone":"odhh","email":"g","zip":"g","country":"idxvdztezvkkaz"},{"id":"4","name":"uynlhonmcqtjqzyzd","date":"23-Nov-2002","price":"8497","number":"5846","address":"vlwglvrcqqqc","company":"epkhgeqxdpwhlsohhadsxkd","desc":"bgjrxlpbbzihdzfhpcp","age":"417","title":"ejbfmucwyvyefpcqfdse","phone":"zimfqbhfccjl","email":"oyy","zip":"oyy","country":"vwntbsjdiohattacg"},{"id":"5","name":"inylpixtxvrorobkpt","date":"20-Oct-2000","price":"3551","number":"9863","address":"cte","company":"akyiy","desc":"tofqicmaqdosodljvosvrv","age":"5844","title":"apgyxfvrtahccuctxqlmtx","phone":"plnldiaaiphhnmcegcmif","email":"kyeakq","zip":"kyeakq","country":"hlktyvxhwyqmfxzrzexc"},{"id":"6","name":"iypgc","date":"19-Aug-2006","price":"4301","number":"9732","address":"vtdr","company":"knpazuyzlxdjauois","desc":"pvvg","age":"5491","title":"gsczwt","phone":"ggfhgaffldjvedkn","email":"ocskjgrpztovnfctlkalqf","zip":"ocskjgrpztovnfctlkalqf","country":"uosysclprohbxotnnmbizh"},{"id":"7","name":"svtdlzafosegupwlddn","date":"20-Dec-2001","price":"5616","number":"2005","address":"qosxzmqugtgfultmpah","company":"wtjag","desc":"rnzxgqlynkl","age":"1577","title":"rxlw","phone":"wpemqmsmfcmmneznbf","email":"mer","zip":"mer","country":"pvbgtmdljtqwjdpvirhvfm"},{"id":"8","name":"navzfnwuiybclenvxe","date":"08-Sep-2002","price":"2842","number":"1098","address":"ykldwgwkhrkmfgho","company":"iqqne","desc":"lidspkvfjgq","age":"5341","title":"xk","phone":"ecxrheyvjhlzu","email":"kfxoxnztsjzjxcg","zip":"kfxoxnztsjzjxcg","country":"pljmdqq"},{"id":"9","name":"zixzdnjilygy","date":"01-Nov-2006","price":"2605","number":"9735","address":"d","company":"h","desc":"qtudwltyxth","age":"8063","title":"lictuaasyakfalibst","phone":"movjzpiwjqrbbaevuf","email":"ndwxixiryblroznxzcgvmw","zip":"ndwxixiryblroznxzcgvmw","country":"nxnsshxoualrj"},{"id":"10","name":"a","date":"02-Mar-2004","price":"9659","number":"5969","address":"mnkptgbptpm","company":"hfoeti","desc":"faona","age":"5707","title":"caurlgfwwycxnwmadufrz","phone":"aeeasrbhneiivupaqlztimpvm","email":"pskorksvllnntbrcjnw","zip":"pskorksvllnntbrcjnw","country":"onjngrawnnpcfarwlksxwgkp"},{"id":"11","name":"rq","date":"16-Jul-2004","price":"1434","number":"565","address":"riprfcevfjvwgggydceoslq","company":"cfyqjaoaie","desc":"nhvimfejlkpkospdl","age":"677","title":"vdzuujuijcmbquxygdc","phone":"pnfzcypfjrzfvzz","email":"ityswlumfrlmvoc","zip":"ityswlumfrlmvoc","country":"cikegzkqrk"},{"id":"12","name":"jucsobkknext","date":"09-Nov-2001","price":"6827","number":"8546","address":"bypmdwl","company":"mdyiqidsarulch","desc":"zamhgedogcdsfze","age":"7409","title":"hruxaxqapllr","phone":"bqtoyascoyesqjsvcec","email":"yauwrvlcgdviupwspoue","zip":"yauwrvlcgdviupwspoue","country":"zwejozmscgrdb"},{"id":"13","name":"wzxdcsmwiipyxkcljyqs","date":"17-Jun-2001","price":"2073","number":"7075","address":"wvmkqjknnng","company":"j","desc":"jynhipssoikayp","age":"2377","title":"admnocxyqllwlvlu","phone":"yccouucdfdbujsvmeia","email":"gzyrkvd","zip":"gzyrkvd","country":"gxzfzc"},{"id":"14","name":"xwxdazxjstwwbxeiwczh","date":"03-Nov-2004","price":"1800","number":"235","address":"kapevnbtqbsol","company":"hhhjemrbpq","desc":"ntvruicu","age":"9596","title":"pmiickb","phone":"vmydtiigzjvqrijna","email":"wcy","zip":"wcy","country":"johsxkcycykbbejklitgy"},{"id":"15","name":"iyqlvtjqcyyvvjy","date":"13-Sep-2007","price":"1782","number":"5005","address":"jwiuecbdnrlmhwiagzdexzzh","company":"ttuygshcbcheeksvvedsnez","desc":"iekhesfxlzws","age":"7184","title":"vug","phone":"yl","email":"qgivkbipavye","zip":"qgivkbipavye","country":"gjxlg"},{"id":"16","name":"dbegwynzxym","date":"06-Jun-2007","price":"3561","number":"6233","address":"rfwmdbsjkpvryguakbwjow","company":"niusdd","desc":"zvowisxac","age":"3143","title":"xzpeuppvmykifyrz","phone":"ucztyopghnhjvxhv","email":"lpbblozvwftn","zip":"lpbblozvwftn","country":"kihk"},{"id":"17","name":"zsmgf","date":"17-Sep-2000","price":"6671","number":"8788","address":"dimfjxujtqonetynbiphih","company":"onneoealijxotuicozr","desc":"e","age":"4195","title":"rmigtqomebaiqejbntycmtkph","phone":"gjorigdrnw","email":"bjmdjvt","zip":"bjmdjvt","country":"fubytdlmoauzhd"},{"id":"18","name":"mucdhyljixmrtgfybhxuljga","date":"02-Apr-2008","price":"6544","number":"1674","address":"pqhrupqfyydlq","company":"rvvsdtnoctomuodzbtpilj","desc":"bpwashqpzmkspefdgzstugwt","age":"3134","title":"jratpcildbttqsf","phone":"l","email":"fqymqrfkxcegsnxthmwq","zip":"fqymqrfkxcegsnxthmwq","country":"zrrsikykvsqmrcciimglqme"},{"id":"19","name":"xlvtcttuk","date":"04-Jun-2007","price":"3963","number":"5126","address":"ddcugedprjahwelg","company":"xb","desc":"zvptgbwblkspnujuznjqxj","age":"9302","title":"okzqhbmhxcbedyfpiye","phone":"toqsczjzihtwrsnzuzgsci","email":"fgcvoaaltpbmravqjdjgvc","zip":"fgcvoaaltpbmravqjdjgvc","country":"uxtbpvklbqnxfnxqhmr"},{"id":"20","name":"rpub","date":"06-Sep-2002","price":"5542","number":"2795","address":"j","company":"uktp","desc":"erlsoqglhnyzhcrwxspc","age":"9766","title":"jano","phone":"yhjsmbefpvlbcyabfcsc","email":"l","zip":"l","country":"ckwmkjaehioavqfafa"},{"id":"21","name":"cjhepkx","date":"12-Aug-2003","price":"3672","number":"5207","address":"fadpaixixyendesdpzg","company":"hlorifbrppkvpokqxizugdhjh","desc":"n","age":"8702","title":"t","phone":"hekynqaffpqafflvctuwa","email":"ejeexbfqwmvhljxmpccfdhk","zip":"ejeexbfqwmvhljxmpccfdhk","country":"cmiwjjunsyspzxg"},{"id":"22","name":"cdvlaiadkg","date":"19-Mar-2005","price":"8373","number":"7612","address":"eqnn","company":"agjtwiqdfa","desc":"jwrje","age":"7004","title":"oytgppzuuqhib","phone":"okblsroy","email":"uhplrudejcypsopmif","zip":"uhplrudejcypsopmif","country":"qgcfqdqjvfiozpdkgxo"},{"id":"23","name":"qjvjxl","date":"07-Oct-2005","price":"5878","number":"8749","address":"rcousxqxgexvihcfwnmnxiw","company":"trbkgyhyavtstjqzonvwv","desc":"bslofjwbeqsfazdhxedqwwa","age":"5234","title":"obskxqmpbbvlywpopvppzw","phone":"dadaxenuspmd","email":"cqceryppuedk","zip":"cqceryppuedk","country":"t"},{"id":"24","name":"pmcqpcnuqinfuqswgvaytpnou","date":"27-Aug-2007","price":"4192","number":"9188","address":"ajwrzzftpngvhxoeeke","company":"du","desc":"soirjtpduzzlyyrs","age":"5436","title":"zjmw","phone":"qbhuelpueedvnxkqrjqdiou","email":"c","zip":"c","country":"amkxkbzsvdelyipbecyptqzj"}]};
+
+YAHOO.example.dtManager = function() {
+	
+	var dataSource, dataTable,
+	
+	manager = {
+		
+		getMergedMeta : function( oMetaOverride ){
+		
+			console.log('=======| getMergedMeta |=======')
+			
+			//Look into faster ways of doing this
+			var merged_meta = ( oMetaOverride !== testData.satg_config ) ? YAHOO.lang.merge( testData.satg_config, oMetaOverride ) : testData.metaConfig;
+			
+			console.log('I present you the merged object:');
+			console.log(merged_meta);
+			
+			//Cheat for now
+			console.log('======= end getMergedMeta =======')
+			return merged_meta;
+		
+		},
+		
+		getDataSource : function( source, oConfig ){
+				
+			console.log('=======| getDataSource |=======')
+		
+			if( this.lastLiveData === source || !source ){
+				
+				console.log('Returning existing data source');
+				
+				console.log('======= end getDataSource =======')
+				return this.dataSourceInstance;
+				
+			} else {
+				
+				console.log('Creating data source');
+				
+				var myDataSource = new YAHOO.util.DataSource( source );
+				
+				myDataSource.responseSchema = oConfig.responseSchema;
+				
+				myDataSource.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+			
+				this.lastLiveData = source;
+				this.dataSourceInstance = myDataSource;
+				
+				console.log('======= end getDataSource =======')
+				return myDataSource;
+				
+			}
+			
+		},
+		
+		handleCallback : function( oCallback ){
+		
+			console.log('=======| handleCallback |=======')
+			if( oCallback.response && oCallback.response.status ){
+				
+				console.log('Parsing JSON data:');
+				console.log(oCallback.response);
+				console.log('======= end handleCallback =======')
+				return this.dataSource.parseJSONData( oCallback );
+				
+			} else {
+				
+				console.log('Local response received');
+				console.log('======= end handleCallback =======')
+				
+			}
+		
+		},
+		
+		apply : function( source, oMeta ){
+			
+			var merged_meta = this.getMergedMeta( oMeta ),
+					data_source = this.getDataSource( source, merged_meta.dataSource );
+					
+			this.dataSource = data_source;
+					
+			data_source.subscribe( 'responseParseEvent', function( oCallback ){ 
+			
+				console.log('Response:');
+				console.log( ( oCallback.response ) );
+				
+				if( !this.lastTableId ){
+				
+					this.lastTableId = oCallback.response.meta.satg_config.id || null;
+					
+					console.log( 'this is a first run' );
+				
+				} else {
+				
+					if( oCallback.response.meta.satg_config && this.lastTableId !== oCallback.response.meta.satg_config.id ){
+					
+						console.log('new table id');
+						
+						this.lastTableId = oCallback.response.meta.satg_config.id;
+					
+					} else {
+					
+						console.log('same table id');
+					
+					}
+				
+				}
+				
+			
+			}, this, true );
+			
+			data_source.sendRequest('fakearg=10');
+			
+		}
+		
+	};
+
+	return {
+		
+		manager : manager,
+		dataSource : dataSource,
+		dataTable : dataTable
+		
+	};
+        
+}();
+</script>
+
+<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+</body>
+</html>

@@ -1,0 +1,57 @@
+<html> 
+<head> 
+<title>A better zoom control on a Yahoo! Map</title> 
+<style type="text/css"> 
+#map{
+height: 75%;
+width: 100%;
+}
+</style> 
+</head> 
+<body> 
+<h1>A better zoom control on a Yahoo! Map</h1>
+<p class="prototypecaption">Uses Google Geodata over a Y! map to show a sweet ass zoom control</p>
+<div id='map'></div>
+
+<script src="http://yui.yahooapis.com/3.1.1/build/yui/yui-min.js"></script>
+<script type="text/javascript" src="http://api.maps.yahoo.com/ajaxymap?v=3.8&appid=YD-_E2iwOY_JXoWrc4l.Sdt9KfTApegYB0s4g--"></script> 
+<script type="text/javascript"> 
+	// Create a map object
+	var map = new YMap(document.getElementById('map'));
+ 
+	// Add map type control
+	map.addTypeControl();
+ 
+	// Add map zoom (long) control
+	map.addZoomLong();
+ 
+	// Add the Pan Control
+	map.addPanControl();
+ 
+	// Set map type to either of: YAHOO_MAP_SAT, YAHOO_MAP_HYB, YAHOO_MAP_REG
+	map.setMapType(YAHOO_MAP_REG);
+ 
+	// Display the map centered on a geocoded location
+	map.drawZoomAndCenter("Los Angeles, Ca", 4);
+	
+	YEvent.Capture(map, map.getEventsList().endMapDraw,function(event) {
+		
+		// Lets get the bounding box
+		var bounds = map.getBoundsLatLon();
+		console.log('Bounds',bounds);
+		
+		YUI().use('node','dump',function(Y) {
+			var url = "geo.php?address=Civic%20Center&bounds="+bounds.LatMin+","+bounds.LonMin+"|"+bounds.LatMax+","+bounds.LonMax+"&sensor=false",
+			    Y = Y,
+			    obj = Y.Get.script(url, {onSuccess: function() {
+				console.log(geo_data);
+				Y.one('#output').set('innerHTML',Y.dump(geo_data.results[0].geometry));
+			    }});
+		});
+	});
+</script> 
+<div id="output">
+	
+</div>
+</body> 
+</html> 

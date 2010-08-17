@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>The Lyric De-sap-ifier</title>
+</head>
+<body>
+<style>
+	textarea{width:400px;height:100px;}
+</style>
+<h1>The Lyric Desapafier</h1>
+
+<textarea id="original_text"></textarea><br>
+<button id="go_button">De-sap-ify</button>
+<script type="text/javascript" src="http://yui.yahooapis.com/3.0.0/build/yui/yui-min.js"></script>
+<pre id="processed_text"></div>
+<script>
+YUI().use("node","io",function(Y){
+	
+	var original_text = Y.one('#original_text'),
+	    go_button     = Y.one('#go_button'),
+
+	    desapify      = function(text) {
+		
+		var temp_string = original_text.get('value'),
+		    term_map    = {
+			"heart"        : "fart",
+			"kiss"         : "fist",
+			"dog"          : "your mom",
+			"love you"     : "fuck you",
+			"her too"      : "her poo",
+			"And tenderly" : "Between her knees"
+		};
+		
+		for(var i in term_map){
+			if(term_map.hasOwnProperty(i)){
+				var reg = new RegExp(i,"gi");
+				temp_string = temp_string.replace(reg,term_map[i]);
+			}
+		}
+		
+		return temp_string;
+		
+	    };
+	
+	go_button.on('click',function(){
+		go_button.set('innerHTML','Working...')
+		Y.one('#processed_text').set(
+			'innerHTML',
+			desapify(original_text.get('value'))
+		);
+		go_button.set('innerHTML','De-sap-ify');
+	});
+});
+</script>
+</body>
+</html>

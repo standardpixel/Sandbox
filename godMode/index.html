@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>God Mode Example</title>
+	<meta name="generator" content="TextMate http://macromates.com/">
+	<meta name="author" content="Eric Gelinas">
+	
+	<style>
+	#god_mode_indicator{color:#f00;position:absolute;top:0;right:0;}
+	</style>
+	<!-- Date: 2009-10-29 -->
+</head>
+<body>
+
+	<h1>God Mode Example</h1>
+	<p>Just imagine for a second that this is a content page. It should not be hard to do because we have all sen them before. You know what I mean, one of those pages that has stuff on it that you would be interested. Maybe sports or music or {other} -- hell nobody is here to judge you. The basic idea is that this is any kind of content and not just one type of content. Any category whatsoever. Repetitive you say? Maybe. You try and come up with something that can fill a paragraph and possibly even get a laugh at the same time. Yeah, why can't a technical example make people happier? Are you some kind of pessimist? Hmmm I apologize. I am being sensitive and judgmental. Maybe we can just agree to demo this project. We are obviously both tired and just want to get on with this demo so here it goes... To test god mode enter up - up - down - down - left - right - left - right - b - a</p>
+	
+<script type="text/javascript" src="http://yui.yahooapis.com/3.0.0/build/yui/yui-min.js"></script>
+
+<script type="text/javascript">
+	
+	YUI({
+		
+		modules: {
+			'gallery-event-konami': {
+				fullpath   : 'http://yui.yahooapis.com/gallery-2009.10.27/build/gallery-event-konami/gallery-event-konami-min.js',
+				requires   : [ 'node-base', 'event-custom' ],
+				optional   : [],
+				supersedes : []
+			}
+		}
+		
+	}).use( 'gallery-event-konami', function( Y ) {
+		
+			var onkonami = function( e ) {
+
+				if( Y.one( '#gallery-event-konami' ) ){
+					
+					Y.one( '#gallery-event-konami' ).remove();
+					
+				} else {
+					
+					Y.one( 'body' ).prepend( '<div id="god_mode_indicator">God Mode Enabled</div>' );
+					
+				}
+
+				Y.one( 'body' ).on( 'konami', onkonami );
+
+			};
+
+			Y.one( 'body' ).on( 'konami', onkonami );
+
+	});
+	
+</script>
+
+</body>
+</html>

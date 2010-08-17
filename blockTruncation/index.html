@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+	<title>CSS Based Block Truncation Demo</title>
+	
+</head>
+
+<body>
+<h1>CSS Based Block Truncation Demo</h1>
+<p>This demo css based block truncation in common scenarios</p>
+
+<style>
+	.truncatefoo{overflow:hidden;text-overflow:ellipsis;white-space: nowrap;border:solid #f00 2px;}
+	div, td{border:solid #000 1px;width:50px;}
+</style>
+
+<h2>Div</h2>
+<div class="truncatefoo">I am a long string that will need to be truncated.</div>
+
+<hr />
+
+<h2>Table</h2>
+<table><tr>
+	<td width="50"><div class="truncatefoo">I am a long string that will need to be truncated.</div></td>
+	<td>I am a long string that will need to be truncated.</td>
+</tr></table>
+
+</body>
+</html>

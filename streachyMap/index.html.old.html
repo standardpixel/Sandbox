@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name = "viewport" content = "user-scalable=no, width=device-width">
+	<title>Touchy</title>
+	<style>
+	div{
+		position:absolute;
+		top:0;right:0;bottom:0;left:0;
+	}
+	.touchspot{
+		position:absolute;
+		background-color:grey;
+		border:solid 1px red;
+		width:50px;
+		height:50px;
+	}
+	</style>
+</head>
+<body>
+<h1>Touchy</h1>
+<P>Demonstration of touch events on the iPhone</P>
+<div class="touchy">
+	
+</div>
+<script>
+(function(){
+	var touchy_div = document.querySelector('div.touchy');
+	touchy_div.addEventListener("touchstart",function(event){
+		var touches = document.querySelectorAll('.touchspot');
+		
+		for(var i=0,l=touches.length;l>i;i++){
+			var touch = touches[i];
+			touch.parentNode.removeChild(touch);
+		}
+		
+		
+		function placeBox(x,y,id) {
+			var el = document.createElement('div');
+			el.className='touchspot';
+			el.id='touch'+id;
+			el.style.top=y+'px';
+			el.style.left=x+'px';
+			touchy_div.appendChild(el);
+		}
+		for(var i=0,l=event.touches.length;l>i;i++){
+			var touch = event.touches[i];
+			placeBox(touch.pageX,touch.pageY,i);
+		}
+	},false);
+	
+	touchy_div.addEventListener("touchmove",function(event){
+		event.preventDefault();
+		function moveBox(id,x,y) {
+			var el = document.getElementById(id);
+			el.style.top=y+'px';
+			el.style.left=x+'px';
+		}
+		for(var i=0,l=event.touches.length;l>i;i++){
+			var touch = event.touches[i];
+			moveBox('touch'+i,touch.pageX,touch.pageY);
+		}
+	},false);
+})();
+</script>
+</body>
+</html>

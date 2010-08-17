@@ -1,0 +1,260 @@
+<html> 
+<head> 
+<title>Adding controls to a Yahoo! Map</title> 
+<style type="text/css"> 
+#map{
+height: 75%;
+width: 100%;
+}
+#map img {
+	opacity:0;
+	-webkit-transition:opacity 1.5s linear;
+	-moz-transition:opacity 1.5s linear;
+	-o-transition:opacity 1.5s linear;
+	transition:opacity 1.5s linear;
+}
+#map.showtiles img {
+	opacity:1;
+}
+
+#touch-marker {
+	position:absolute;
+	width:100px;
+	height:100px;
+	margin:-50 0 0 -50;
+	background-color:#000;
+	opacity: 0.5;
+	-webkit-border-radius: 5em;
+}
+
+</style> 
+</head> 
+<body> 
+<h1>Stretchy Yahoo Map</h1>
+<p class="prototypecaption">Modifications of touch gestures and other junk to the Yahoo Map api</p>
+<div>X: <span id='out_x'></span></div>
+<div>Y: <span id='out_y'></span></div>
+<div>Pinch val: <span id='pinch_val'></span></div>
+<div>Pinch dir: <span id='out_pinch'></span></div>
+<div id='map'></div>
+
+<script type="text/javascript" src="http://api.maps.yahoo.com/ajaxymap?v=3.8&appid=YD-_E2iwOY_JXoWrc4l.Sdt9KfTApegYB0s4g--"></script> 
+<script type="text/javascript"> 
+	// Create a map object
+	var map = new YMap(document.getElementById('map'));
+ 
+	// Add map type control
+	map.addTypeControl();
+ 
+	// Add map zoom (long) control
+	map.addZoomLong();
+ 
+	// Add the Pan Control
+	map.addPanControl();
+ 
+	// Set map type to either of: YAHOO_MAP_SAT, YAHOO_MAP_HYB, YAHOO_MAP_REG
+	map.setMapType(YAHOO_MAP_REG);
+ 
+	// Display the map centered on a geocoded location
+	map.drawZoomAndCenter("Los Angeles, Ca", 4);
+	
+	YEvent.Capture(map, map.getEventsList().endMapDraw,function(event) {
+		
+		document.getElementById('map').className="showtiles";
+	});
+	
+	
+	
+	/*
+	* My shit
+	*/
+	var touch_cache = {};
+	
+	function barf(obj) {
+		var barf = '<ul>';
+		for(var i in obj) {
+			if(obj[i] instanceof Object) {
+				if(i !== 'view') {
+					barf += '<li><ul>' + i + '<br>'
+					for(var ii in obj[i]) {
+						barf += '<li>'+ ii + ' :: ' + obj[i][ii] + '<br></li>';
+					}
+					barf += '</ul></li>';
+				}
+			} else {
+				barf += '<li>' + i + ' :: ' + obj[i] + '<br></li>';
+			}
+		}
+		barf += '</ul>';
+		document.getElementById('barf').innerHTML+=barf;
+	}
+	
+	function createTouchMarker(XY) {
+		var element = document.getElementById('touch-marker');
+		
+		if(!element) {
+			var element = document.createElement('div'),
+			    body    = document.getElementsByTagName('body')[0];
+
+			body.appendChild(element);
+			element.id  = 'touch-marker';
+		}
+		
+		element.style.top  = XY[1];
+		element.style.left = XY[0];
+	}
+	
+	var map_element  = document.querySelector('#map'),
+	    active_touch = null,
+	    draggable    = null,
+	    xy           = null,
+	    laggylaggy   = null;
+	
+	function scaleMapTile(event,direction) {
+		var parent = document.getElementById('map'),
+		    clone  = document.getElementById('streachy_map_tile_clone');
+		
+		if(!clone) {
+			clone = document.createElement('image');
+			parent.appendChild(clone);
+			clone.id             = 'streachy_map_tile_clone';
+			clone.src            = event.target.src;
+			clone.style.width    = event.target.style.width;
+			clone.style.width    = event.target.style.width;
+			clone.style.position = 'absolute';
+			clone.style.top      = event.target.y + 'px';
+			clone.style.left     = event.target.x + 'px';
+		}
+		
+		if(direction === 'in') {
+			clone.style.width  = (clone.offsetWidth  + 15)+'px';
+			clone.style.height = (clone.offsetHeight + 15)+'px';
+		} else {
+			clone.style.width  = (clone.offsetWidth  - 15)+'px';
+			clone.style.height = (clone.offsetHeight - 15)+'px';
+		}
+	}
+	
+	var state = {};
+	
+	YEvent.Capture(map,'endMapDraw',function() {
+		var clone = document.getElementById('streachy_map_tile_clone');
+		if(clone) {
+			clone.parentNode.removeChild(clone);
+		}
+	});
+	
+	map_element.addEventListener('gesturechange',function(event){
+		event.preventDefault();
+		var type = (Math.round(event.scale) > 0) ? 'in' : 'out';
+		
+		document.getElementById('pinch_val').innerHTML=Math.round(event.scale) + ' | ' + event.scale;
+		
+		var zoom = map.getZoomLevel();
+		
+		if(event.scale > state.last_scale) {
+			zoom = zoom-1;
+			scaleMapTile(event,'out');
+		} else {
+			zoom = zoom+1;
+			scaleMapTile(event,'in');
+		}
+		
+		if(zoom > 3 && zoom < 15) {
+			map.setZoomLevel(zoom);
+		}
+		
+		/*
+		if(type === 'in' && zoom > 3) {
+			map.setZoomLevel(zoom-1);
+			scaleMapTile(event,'in');
+			document.getElementById('out_pinch').innerHTML='In';
+		} else if(type === 'out' && zoom < 15) {
+			map.setZoomLevel(zoom+1);
+			scaleMapTile(event,'out');
+			document.getElementById('out_pinch').innerHTML='Out';
+		}
+		*/
+		
+		state.last_scale = event.scale;
+	},false);
+	
+	map_element.addEventListener('touchstart',function(event){
+		event.preventDefault();
+		
+		if(active_touch) {
+			clearTimeout(active_touch);
+			active_touch = null;
+		}
+		if(event.touches.length > 1) {
+			active_touch = null;
+		}
+		
+		if(event.touches.length === 1) {
+			active_touch = setTimeout(function() {
+				createTouchMarker([event.touches[0].pageX,event.touches[0].pageY]);
+				draggable=true;
+			},1000);
+		}
+		
+	},false);
+	
+	map_element.addEventListener('touchmove',function(event){
+		event.preventDefault();
+		
+		if(event.touches.length === 1) {
+			if(!draggable) {//if not in draggable state, clear the drag activation
+				clearTimeout(active_touch);
+			}
+
+			if(!xy && draggable) {//Captures xy for testing direction
+				xy=[event.touches[0].pageX,event.touches[0].pageY];
+				laggylaggy=0;
+			} else if(draggable) {
+				var new_xy    = [event.touches[0].pageX,event.touches[0].pageY],
+				    center    = map.getCenterLatLon(),
+				    geo_point = map.convertLatLonXY(center);
+				
+				if((new_xy[0] > xy[0]+1)) {
+					var map_x = (new_xy[0] < xy[0]) ? geo_point.x + 100 : geo_point.x - 100
+				} else {
+					var map_x = geo_point.x;
+				}
+				if((new_xy[1] > xy[1]+1)) {
+					var map_y = (new_xy[1] < xy[1]) ? geo_point.y + 100 : geo_point.y - 100
+				} else {
+					var map_y = geo_point.y;
+				}
+
+				if(laggylaggy < 50) {//throdle the dragging
+					laggylaggy++;
+					createTouchMarker([event.touches[0].pageX,event.touches[0].pageY]);
+				} else {
+					document.getElementById('out_x').innerHTML=(new_xy[0] < xy[0]) ? 'Down' : 'Up';
+					document.getElementById('out_y').innerHTML=(new_xy[1] < xy[1]) ? 'Right' : 'Left';
+					map.panToLatLon(map.convertXYLatLon(new YCoordPoint(map_x,map_y)));
+					laggylaggy = null;
+					xy = null;
+					createTouchMarker([event.touches[0].pageX,event.touches[0].pageY]);
+				}
+			}
+		}
+		
+	},false);
+	
+	map_element.addEventListener('touchend',function(event){
+		event.preventDefault();
+		clearTimeout(active_touch);
+		var element = document.getElementById('touch-marker');
+		
+		active_touche=null;
+		if(element) {
+			element.parentNode.removeChild(element);
+		}
+		draggable=false;
+		xy=null;
+		laggylaggy=null;
+	},false);
+</script> 
+</body> 
+</html> 

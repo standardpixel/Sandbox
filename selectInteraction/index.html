@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+	<title>Select Interaction Demo</title>
+	
+</head>
+
+<body>
+<h1>Select Interaction Demo</h1>
+<p>This proves that the change event is only fired when the select is clicked and NOT when the select elements "selectedIndex" event is changed with JavaScript'</p>
+
+
+<div><button onclick="toggle_select();">Toggle</button></div>
+<div>
+	<select id="the_select" onchange="onChangeEvent(this);">
+		<option value="option1">option 1</option>
+		<option value="option2">option 2</option>
+	</select>
+</div>
+<div id="output_block">
+
+</div>
+
+<script>
+	var	toggle_select = function(){
+		
+				var select_element = document.getElementById('the_select');
+		
+				select_element.selectedIndex = ( select_element.selectedIndex === 1 ) ? 0 : 1;
+		
+			},
+			
+			onChangeEvent = function(){
+				
+				document.getElementById('output_block').innerHTML += 'The select has been changed.<br />';
+				
+			}
+	
+</script>
+
+</body>
+</html>
