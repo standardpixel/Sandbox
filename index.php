@@ -237,7 +237,8 @@ padding-right:10px;
 
 
 	</ul>
-
+		Each StandardPixel Prototype by Eric Gelinas is licensed under a Creative Commons Attribution 3.0 United States License.
+		Based on a work at standardpixel.com.
 	<p class="footer"><a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/"><img class="cc-img" alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/us/88x31.png" /></a><br /><span xmlns:dc="http://purl.org/dc/elements/1.1/" href="http://purl.org/dc/dcmitype/InteractiveResource" property="dc:title" rel="dc:type">Each StandardPixel Prototype</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://standardpixel.com" property="cc:attributionName" rel="cc:attributionURL">Eric Gelinas</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>.<br />Based on a work at <a xmlns:dc="http://purl.org/dc/elements/1.1/" href="http://s.standardpixel.com/proto" rel="dc:source">standardpixel.com</a>.</p>
 </div>
 </body>
