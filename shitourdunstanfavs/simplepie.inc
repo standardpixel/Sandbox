@@ -12143,6 +12143,7 @@ class SimplePie_IRI
 	 * @param string $query
 	 * @return bool
 	 */
+	/*
 	function set_query($query)
 	{
 		if ($query === null || $query === '')
@@ -12152,6 +12153,20 @@ class SimplePie_IRI
 		else
 		{
 			$this->query = $this->replace_invalid_with_pct_encoding($query, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~!$\'()*+,;:@/?');
+		}
+		$this->valid[__FUNCTION__] = true;
+		return true;
+	}
+	*/
+	function set_query($query)
+	{
+		if ($query === null || $query === '')
+		{
+			$this->query = null;
+		}
+		else
+		{
+			$this->query = $query;
 		}
 		$this->valid[__FUNCTION__] = true;
 		return true;
