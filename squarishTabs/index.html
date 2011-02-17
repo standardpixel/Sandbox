@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="device-width">
+	<title>Squarish Tabs Example</title>
+	<style>
+	
+		body {
+			font-family: helvetica;
+			background-color:#FEFCD7;
+			color:#111;
+			padding:10px;
+			margin:0;
+			font-size:13px;
+			min-width:475px;
+		}
+		
+		header {
+			margin:0;
+			padding:0 0 3px 0;
+		}
+		
+		h1 {
+			margin:10px 0 57px 0;
+			padding:0;
+			line-heignt:32px;
+		}
+		
+		h2 {
+			margin:0 0 10px 0;
+		}
+		
+		#tab_handles {
+			position:absolute;
+			display:block;
+			text-align:right;
+			top:-47px;
+			right:0;
+		}
+		
+		#tab_handles li {
+			list-style-type:none;
+			display:inline-block;
+			padding:10px;
+			background-color:#333;
+			border-top-left-radius: 5px;
+			border-top-right-radius: 5px;
+		}
+		
+		#tab_handles li:hover {
+			background-color:#555;
+		}
+		
+		#tab_handles li a {
+			color:#fff;
+			font-weight:bolder;
+			text-decoration:none;
+			border:none;
+		}
+		
+		#tab_handles li a:active {
+		  outline: none;
+		}
+		
+		#tab_handles li.selected {
+			background-color:#096;
+			-webkit-box-shadow: -1px 0 2px #999;
+			-moz-box-shadow: -1px 0 2px #999;
+			box-shadow: -1px 0 2px #999;
+		}
+		
+		#tabs {position:relative;}
+		
+		#tabs .tab_body {
+			background-color:#fff;
+			border:solid #096 10px;
+			padding:10px;
+			overflow:hidden;
+			display:block;
+			margin-bottom:10px;
+		}
+		
+		#tabs .tab_body p img {
+			float:left;
+			margin:0 .5em 0 0;
+			border:none;
+		}
+	
+	</style>
+</head>
+<body>
+	<header>
+		<h1>Top Last.Fm Artists</h1>
+	</header>
+	<div id="tabs">
+		<ul id="tab_handles">
+			<li class="selected"><a href="#tab_broken_social_scene">Broken Social Scene</a></li>
+			<li><a href="#tab_little_dragon">Little Dragon</a></li>
+			<li><a href="#tab_the_velvet_teen">The Velvet Teen</a></li>
+		</ul>
+		<div class="tab_body" id="tab_broken_social_scene">
+			<h2>Broken Social Scene</h2>
+			<p><a href="http://www.last.fm/music/Broken+Social+Scene/+images/25629877"><img src="http://userserve-ak.last.fm/serve/126/25629877.jpg"></a>Broken Social Scene is an indie rock group formed in 1999 in Toronto, Canada. The band’s core members are Kevin Drew and Brendan Canning. This duo recorded and released the band’s ambient debut album, Feel Good Lost, in 2001, with contributions from Ohad Benchetrit (also known as Years), Evan Cranley, Leslie Feist, Justin Peroff, Bill Priddle, and Charles Spearin. All of these musicians would emerge as key members of Broken Social Scene in future endeavors.</p>
+		</div>
+		<div class="tab_body" id="tab_little_dragon">
+			<h2>Little Dragon</h2>
+			<p><a href="http://www.last.fm/music/Little+Dragon/+images/41955569"><img src="http://userserve-ak.last.fm/serve/126/41955569.jpg" width="126px" height="189px"></a>Little Dragon is an electronic music group formed in 2006 and based in Gothenburg, Sweden. The band is made up of Yukimi Nagano (vocals), Fredrick Källgren (bass), Håkan Wirenstrand (keyboards) and Erik Bodin (drums). To date, they released two studio albums: Little Dragon (2007) and Machine Dreams (2009).</p>
+		</div>
+		<div class="tab_body" id="tab_the_velvet_teen">
+			<h2>The Velvet Teen</h2>
+			<p><a href="http://www.last.fm/music/The+Velvet+Teen/+images/2848135"><img src="http://userserve-ak.last.fm/serve/126/2848135.jpg"></a>Since its inception in late 1999, The Velvet Teen has traveled the world and challenged the very concept of genre with its eclectic and at times schizophrenic appeal. The early EPs which showed prowess in the pop realm. The Velvet Teen truly has a talent for seducing the masses into a cult-like state, before promptly leaving the faithless with nothing but a kool-aid aftertaste. The believers, however, will vouch that the experience is well worth the trouble.</p>
+		</div>
+	</div>
+	<footer>
+		<p>Content for this example was lifted from <a href="http://lasts.fm">Last.Fm</a></p>
+	</footer>
+	
+	<script>
+		(function() {
+			
+			/*
+			*  Checking the browser capabilities. For the sake of this demo
+			*  I am not fully supporting IE.
+			*/
+			if(document.querySelectorAll && document.body.addEventListener) {
+
+				var tabs = (function() {
+				
+					return {
+						getTabHandleElements : function() {
+							return document.querySelectorAll('#tab_handles a');
+						},
+					
+						getTabBodyElements : function() {
+							return document.querySelectorAll('#tabs .tab_body');
+						},
+					
+						getSelectedTabId : function() {
+							var element = document.querySelector('#tab_handles li.selected a');
+						
+							/*
+							*  Return the hash of the href
+							*/
+							return element.href.split('#')[1]; 
+						},
+
+						selectTab : function( tab_id ) {
+						
+							var tabs   = this.getTabBodyElements(),
+							    selected_tab = document.getElementById(tab_id);
+						
+							/*
+							*  Hide all tabs
+							*/
+							for(var i=0,l=tabs.length; l>i; i++) {
+								tabs[i].style.display='none';
+								
+								/*
+								*  Clear selected tabs
+								*/
+								document.getElementById(tabs[i].getAttribute('data-tab-element-id')).parentNode.className = '';
+							}
+						
+							/*
+							*  Show selected tab
+							*/
+							selected_tab.style.display='block';
+							
+							/*
+							*  Set selected tab
+							*/
+							document.getElementById(selected_tab.getAttribute('data-tab-element-id')).parentNode.className = 'selected';
+						},
+					
+						onTabHandleClick : function(click_event) {
+							this.selectTab(click_event.target.href.split('#')[1]);
+						},
+					
+						attachEvents : function() {
+							var that        = this,
+							    tab_handles = this.getTabHandleElements();
+						
+							for(var i=0,l=tab_handles.length; l>i; i++) {
+								tab_handles[i].addEventListener(
+									'click',
+									function() {
+										that.onTabHandleClick.apply(that,arguments);
+									},
+									false
+								);
+							}
+						},
+					
+						bindTabElements : function() {
+							var tab_handles = this.getTabHandleElements();
+						
+							for(var i=0,l=tab_handles.length; l>i; i++) {
+								var id = 'handle' + tab_handles[i].href.split('#')[1];
+								tab_handles[i].id = id;
+								document.getElementById(tab_handles[i].href.split('#')[1]).setAttribute('data-tab-element-id',id);
+							}
+						},
+					
+						init : function() {
+						
+							var preload_tab      = document.location.hash,
+							    preload_tab_body = document.getElementById(preload_tab.substring(1));
+						
+						
+								/*
+								*  Attach event listeners to tabs
+								*/
+								this.attachEvents();
+
+								this.bindTabElements();
+						
+							/*
+							*  Set initial state. If javascript does not 
+							*  run all of the content will be stacked.
+							*/
+						
+							if(preload_tab_body) {
+								this.selectTab( preload_tab.substring(1) );
+							} else {
+								this.selectTab( this.getSelectedTabId() );
+							}
+						
+						}
+					};
+				})();
+			
+				/*
+				*  This demo only likes modern browsers
+				*  though it should still be readable for
+				*  all
+				*/
+			
+				tabs.init();
+			}
+		})();
+	</script>
+</body>
+</html>
