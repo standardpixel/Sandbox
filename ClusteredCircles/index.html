@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=1036">
+	<title>Canvas Map</title>
+	
+	<style>
+		#map {
+			width:900px;
+			height:500px;
+			border:solid 1px red;
+			position:relative;
+			overflow:hidden;
+		}
+		
+		.fence {
+			background-color:blue;
+			color:white;
+			padding:3px;
+			overflow:hidden;
+			width:10px;
+			height:10px;
+			position:absolute;
+		}
+	</style>
+</head>
+<body>
+
+<div id="map"></div>
+<form name="geofences">
+	<label>Home: <input type="text" name="Home" value="1:1:200"></label>
+	<label>Office: <input type="text" name="Office" value="1:1:200"></label>
+	<label>Coffee_Truck: <input type="text" name="Coffee_Truck" value="1:1:200"></label>
+	<label>Strip_Club: <input type="text" name="Strip_Club" value="200:200:200"></label>
+	<label>Albatross: <input type="text" name="Albatross" value="1:1:200"></label>
+</form>
+
+<script src="http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js"></script>
+<script>
+	(function(){
+		
+		YUI().use("node","selector-css3",function(Y) {
+			
+			var map_node              = Y.one('#map'),
+			    map_node_width        = map_node.get('offsetWidth'),
+			    map_node_height       = map_node.get('offsetHeight'),
+			    display_items         = {},
+			    max_clustering_passes = 100;
+			
+			function getItemsObjectFromMarkup() {
+				var geofences_field_nodes = Y.all('form[name=geofences] input'),
+				    geofences             = {};
+				
+				geofences_field_nodes.each(function(geofence_field_node) {
+					
+					var geofence_data = geofence_field_node.get('value').split(':');
+					
+					geofences[geofence_field_node.get('name')] = {
+						field_node : geofence_field_node,
+						label      : geofence_field_node.get('name'),
+						x          : geofence_data[0],
+						y          : geofence_data[1],
+						radius     : geofence_data[2]
+					};
+				});
+				
+				return geofences;
+			}
+			
+			function drawAFence(fence) {
+				map_node.append('<div class="fence" id="fence_'+fence.label+'">'+fence.label+'</div>');
+			}
+			
+			function setFence(fence) {
+				var fence_node = Y.one('#fence_'+fence.label);
+				    
+				fence_node.setStyle('width',fence.radius + 'px');
+				fence_node.setStyle('height',fence.radius + 'px');
+				
+				var offset     = fence_node.get('offsetHeight')/2;
+				
+				fence_node.setStyle('left',(fence.x-offset) + 'px');
+				fence_node.setStyle('top',(fence.y-offset) + 'px');
+			}
+			
+			function getFenceCenterPoint(fence) {
+				return [fence.x-fence.radius/2,fence.y-fence.radius/2];
+			}
+			
+			function drawGeofence(geofence) {
+				map_node.append('<div style="position:absolute;border:solid 1px green;background-color:green;-moz-border-radius:'+(geofence.radius)+'px;-webkit-border-radius:'+(geofence.radius)+'px;width:'+(geofence.radius*2)+'px;height:'+(geofence.radius*2)+'px;top:'+(geofence.y-(geofence.radius))+'px;left:'+(geofence.x-(geofence.radius))+'px;"></div>');
+			}
+			
+			function getAmountOfAinB(a,b) {
+				
+				var a_neg_edge = a.x,
+				    a_pos_edge = getFenceCenterPoint(a)+a.radius,
+				    b_neg_edge = getFenceCenterPoint(b),
+				    b_pos_edge = getFenceCenterPoint(b)+b.radius;
+				
+				if(a_pos_edge >= b_neg_edge) {
+					return a_pos_edge - b_neg_edge;
+				}
+				
+				if(a_neg_edge <= b_pos_edge) {
+					return b_pos_edge - a_neg_edge;
+				}
+				
+				return false;
+				
+			}
+			
+			function showCenterDots() {
+				var items = getItemsObjectFromMarkup();
+				
+				for(var i in items) {
+					var item = items[i];
+					
+					map_node.append('<div style="background-color:red;width:4px;height:4px;position:absolute;top:'+(item.y-2)+'px;left:'+(item.x-2)+'px;"></div>');
+				}
+			}
+			
+			function cluser() {
+				var display_items = getItemsObjectFromMarkup(),
+				    pass_count    = 0;
+				
+				map_node.set('innerHTML','');
+
+				for(var i in display_items) {
+					var fence = display_items[i];
+					
+					for(var ii in display_items) {
+						drawGeofence(fence);
+						console.log(
+							fence.label,getFenceCenterPoint(fence),
+							display_items[ii].label,getFenceCenterPoint(display_items[ii])
+						);
+						
+						//isAinB(fence,,display_items[ii]);
+
+						pass_count++;
+
+						if(pass_count === max_clustering_passes) {
+							Y.log('Max clustering passes of ' + max_clustering_passes + ' has been reached');
+							break;
+						}
+					}
+					
+					if(pass_count === max_clustering_passes) {
+						Y.log('Max clustering passes of ' + max_clustering_passes + ' has been reached');
+						break;
+					}
+				}
+			}
+			
+			Y.all('form input').on('keyup',function() {cluser();showCenterDots();});
+			
+			cluser();
+			
+			showCenterDots();
+		});
+		
+	})();
+</script>
+</body>
+</html>
