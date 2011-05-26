@@ -93,6 +93,7 @@ function displayTitle($photo_row) {
 					</div>
 
 					<div class="sidebar">
+						<button class="share-facebook">Share on Facebook</button>
 						<button class="tag-somebody">Tag Somebody</button>
 					</div>
 				</div>
@@ -110,11 +111,12 @@ function displayTitle($photo_row) {
 			*  My Shit
 			*/
 			YUI().use('node','io',function(Y){
-				var tag_somebody_button_node = Y.one('button.tag-somebody'),
+				var tag_somebody_button_node = Y.all('button.tag-somebody'),
 				    content_node             = Y.one('#content'),
 				    picker                   = null;
 			
-				tag_somebody_button_node.on('click',function() {
+				tag_somebody_button_node.on('click',function(e) {
+					console.log(e);
 					content_node.append('<div class="picker"></div>');
 					picker = content_node.one('.picker');
 				
@@ -127,7 +129,7 @@ function displayTitle($photo_row) {
 							dom_node.parentNode.removeChild(dom_node);
 						});
 					
-						picker.one('button.close-action').on('click',function() {
+						picker.one('button.close-action').on('click',function(e) {
 							var dom_node = Y.Node.getDOMNode(picker);
 							dom_node.parentNode.removeChild(dom_node);
 						});
