@@ -1,5 +1,5 @@
 <?
-include 'lib_auth.php';
+require 'lib_auth.php';
 
 #
 # Create app array
@@ -94,7 +94,7 @@ function displayTitle($photo_row) {
 
 					<div class="sidebar">
 						<button class="share-facebook">Share on Facebook</button>
-						<button class="tag-somebody">Tag Somebody</button>
+						<button class="tag-somebody" data-photo-id="<?= $app['photos'][$i]['id']; ?>">Tag Somebody</button>
 					</div>
 				</div>
 			
@@ -111,20 +111,20 @@ function displayTitle($photo_row) {
 			*  My Shit
 			*/
 			YUI().use('node','io',function(Y){
-				var tag_somebody_button_node = Y.all('button.tag-somebody'),
-				    content_node             = Y.one('#content'),
-				    picker                   = null;
+				var tag_somebody_button_node   = Y.all('button.tag-somebody'),
+				    share_facebook_button_node = Y.all('button.share-facebook'),
+				    content_node               = Y.one('#content'),
+				    picker                     = null;
 			
 				tag_somebody_button_node.on('click',function(e) {
-					console.log(e);
-					content_node.append('<div class="picker"></div>');
+					content_node.append('<div class="picker">Settle down while I find your contacts...</div>');
 					picker = content_node.one('.picker');
 				
-					Y.io('./picker.php', {on:{complete:function(a) {
+					Y.io('./fragment_picker.php', {on:{complete:function(a) {
+						picker.set('innerHTML','');
 						picker.append(arguments[1].responseText);
 					
 						picker.all('ul li').on('click',function(e) {
-							console.log(e.currentTarget.getAttribute('data-id'));
 							var dom_node = Y.Node.getDOMNode(picker);
 							dom_node.parentNode.removeChild(dom_node);
 						});
@@ -134,6 +134,28 @@ function displayTitle($photo_row) {
 							dom_node.parentNode.removeChild(dom_node);
 						});
 					}}});
+				});
+				
+				share_facebook_button_node.on('click',function(e) {
+					console.log('Sharing...');
+					//content_node.append('<div class="picker"></div>');
+					//picker = content_node.one('.picker');
+				
+					/*
+					Y.io('./picker.php', {on:{complete:function(a) {
+						picker.append(arguments[1].responseText);
+					
+						picker.all('ul li').on('click',function(e) {
+							var dom_node = Y.Node.getDOMNode(picker);
+							dom_node.parentNode.removeChild(dom_node);
+						});
+					
+						picker.one('button.close-action').on('click',function(e) {
+							var dom_node = Y.Node.getDOMNode(picker);
+							dom_node.parentNode.removeChild(dom_node);
+						});
+					}}});
+					*/
 				});
 			});
 		

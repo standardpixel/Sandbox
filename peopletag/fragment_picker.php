@@ -1,8 +1,9 @@
 <?php
 
-include 'lib_auth.php';
+require './lib_auth.php';
+require './lib_facebook.php';
+
 require_once '../../config/generic_photo.inc';
-require './facebook.php';
 
 #
 # Setup app array
