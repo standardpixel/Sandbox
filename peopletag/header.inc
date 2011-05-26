@@ -3,7 +3,7 @@
 xmlns:fb="http://www.facebook.com/2008/fbml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-<title>Generic Photo Site : Water Fall Photo</title>
+<title>Generic Photo Site : <?=$app['page_title']?></title>
 
 <style>
 	body {
@@ -59,4 +59,4 @@ xmlns:fb="http://www.facebook.com/2008/fbml">
 </style>
 </head>
 <body>
-	<h1>Generic Photo Site : Your Photos</h1>
+	<h1>Generic Photo Site : <?=$app['page_title']?></h1>

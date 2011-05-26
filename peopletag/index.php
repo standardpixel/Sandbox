@@ -1,23 +1,59 @@
 <?
 include 'lib_auth.php';
 
-
+#
+# Create app array
+#
 
 $app = array(
-	user => array(
+	user      => array(
 		nsid     => (string) $auth_response->children[1]->children[5]->attributes['nsid'],
 		username => (string) $auth_response->children[1]->children[5]->attributes['username'],
 		fullname => (string) $auth_response->children[1]->children[5]->attributes['fullname']
 	),
-	photos => array()
+	photos    => array(),
+	error_msg => null
 );
+
+#
+# Set focus user
+#
+
+if(!$_GET['user'] || $_GET['user']==='me' || $_GET['user']===$app['user']['username']) {
+	
+	$app['focus_user'] = $app['user'];
+	
+} else {
+	
+	$api_response_get_nsid = $api->callMethod('flickr.people.findByUsername', array(
+		'username' => strip_tags($_GET['user'])
+	));
+	
+	if($api_response_get_nsid) {
+		$app['focus_user'] = array(
+			username => strip_tags($_GET['user']),
+			nsid     => (string) $api_response_get_nsid->children[1]->attributes['nsid']
+		);
+	} else {
+		$app['error_msg'] = 'I was not able to find the user named: ' . strip_tags($_GET['user']);
+	}
+}
+
+#
+# Set page title
+#
+$app['page_title'] = ($app['focus_user']['nsid'] === $app['user']['nsid']) ? 'Your Photos' : $app['focus_user']['username'] . '\'s Photos';
+
+if($app['error_msg']) {
+	$app['page_title'] = 'OMG! An error! FML!!!';
+}
 
 #
 # Get photos from Flickr
 #
 $user_photos = $api->callMethod('flickr.people.getPhotos', array(
 	'auth_token' => $_COOKIE['auth_token'],
-	'user_id'        =>"me",
+	'user_id'        =>$app['focus_user']['nsid'],
 	'per_page'       =>10,
 	'page'           =>1
 ));
@@ -45,7 +81,7 @@ function displayTitle($photo_row) {
 
 <? include('header.inc'); ?>
 	
-	<?if($auth_response) {?>
+	<?if($auth_response && !$app['error_msg']) {?>
 		<div id="content">
 		
 			<? for($i=0;count($app['photos']) > $i; $i++) { ?>
@@ -116,7 +152,12 @@ function displayTitle($photo_row) {
 			}());
 		</script>
 	
+	<? } else if($app['error_msg']) { ?>
+		
+		<?=$app['error_msg']?>
+		
 	<? } else { ?>
+		
 		<?= $auth_write ?>
 	<? } ?>
 <? include('footer.inc'); ?>
