@@ -85,8 +85,11 @@
 				default_class : {
 					value : 'circle-selector'
 				},
-				hover_class : {
-					value : 'hover'
+				dragable_class : {
+					value : 'dragable'
+				},
+				resizable_class : {
+					value : 'resizable'
 				},
 				dragging_class : {
 					value : 'dragging'
@@ -112,6 +115,13 @@
 						if(Y.Lang.isObject(this.get('initial_xy'))) {
 							circle_node.setXY(this.get('initial_xy'));
 						}
+						
+						circle_node.on('mouseover',function() {
+							console.log('hovering');
+						});
+						circle_node.on('mouseout',function() {
+							console.log('not hovering');
+						});
 					}
 				},
 				show : function() {
