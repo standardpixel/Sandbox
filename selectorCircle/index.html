@@ -25,6 +25,7 @@
 			height:600px;
 			width:900px;
 			background-color:#fff;
+			position:relative;
 		}
 		
 		.circle-selector {
@@ -96,10 +97,14 @@
 				},
 				resizing_class : {
 					value : 'resizing'
+				},
+				border_width: {
+					value : 3
 				}
 			}
 
 			Y.extend(SelectorCircle, Y.Base, {
+				circle_node : null,
 				create : function() {
 					var root_node     = this.get('root_node'),
 					    default_class = this.get('default_class');
@@ -111,6 +116,7 @@
 					if(circle_node) {
 						circle_node.setStyle('height',this.get('initial_radius')*2);
 						circle_node.setStyle('width',this.get('initial_radius')*2);
+						circle_node.setStyle('border-width',this.get('border_width') + 'px');
 						
 						if(Y.Lang.isObject(this.get('initial_xy'))) {
 							circle_node.setXY(this.get('initial_xy'));
@@ -123,6 +129,8 @@
 							console.log('not hovering');
 						});
 					}
+					
+					this.circle_node = circle_node;
 				},
 				show : function() {
 					var root_node     = this.get('root_node'),
@@ -139,6 +147,14 @@
 					} else {
 						Y.log('No root node was found in the module configuration','error','selector-circle');
 					}
+				},
+				getCentroid : function() {
+					var root_node        = this.get('root_node'),
+					    circle_node      = this.circle_node,
+					    parent_offset_xy = [circle_node.getX()-root_node.getX(),circle_node.getY()-root_node.getY()],
+					    half_node_width  = circle_node.get('offsetWidth')/2;
+					
+					return [(parent_offset_xy[0]+half_node_width)-this.get('border_width'),(parent_offset_xy[1]+half_node_width)-this.get('border_width')];
 				}
 			});
 
@@ -147,7 +163,7 @@
 			});
 			
 			selector_circle.show();
-			
+			console.log(selector_circle.getCentroid());
 		});
 	</script>
 </body>
