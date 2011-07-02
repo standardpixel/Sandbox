@@ -26,6 +26,16 @@
 			width:900px;
 			background-color:#fff;
 		}
+		
+		.circle-selector {
+			width:15px;
+			height:15px;
+			border:solid 3px #0063DC;
+			background-color:rgba(68, 68, 68, .5);
+			moz-border-radius:50%;
+			webkit-border-radius:50%;
+			border-radius:50%;
+		}
 	</style>
 </head>
 <body>
@@ -63,11 +73,17 @@
 				initial_radius : {
 					value : 15
 				},
+				initial_xy : {
+					value : null
+				},
 				resizable : {
 					value : true
 				},
 				dragable : {
 					value : true
+				},
+				default_class : {
+					value : 'circle-selector'
 				},
 				hover_class : {
 					value : 'hover'
@@ -81,14 +97,34 @@
 			}
 
 			Y.extend(SelectorCircle, Y.Base, {
+				create : function() {
+					var root_node     = this.get('root_node'),
+					    default_class = this.get('default_class');
+					
+					root_node.append('<div class="' + default_class + '"></div>');
+					
+					var circle_node = root_node.one('.' + default_class);
+					
+					if(circle_node) {
+						circle_node.setStyle('height',this.get('initial_radius')*2);
+						circle_node.setStyle('width',this.get('initial_radius')*2);
+						
+						if(Y.Lang.isObject(this.get('initial_xy'))) {
+							circle_node.setXY(this.get('initial_xy'));
+						}
+					}
+				},
 				show : function() {
-					var root_node = this.get('root_node');
+					var root_node     = this.get('root_node'),
+					    default_class = this.get('default_class');
 					
 					if(root_node) {
-						var circle_node = root_node.one('.circle-selector');
+						var circle_node = root_node.one('.' + default_class);
 
 						if(circle_node) {
 							circle_node.setStyle('display','block');
+						} else {
+							this.create();
 						}
 					} else {
 						Y.log('No root node was found in the module configuration','error','selector-circle');
