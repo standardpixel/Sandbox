@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title></title>
+
+	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.2r1/build/reset/reset-min.css">
+	
+	<style>
+		h1{
+			font-size:24px;
+			margin:15px 0;
+		}
+		
+		#main_container{
+			padding:15px;
+			background-color:#eee;
+		}
+		
+		#circle_container{
+			border:solid 1px #ddd;
+			height:600px;
+			width:900px;
+			background-color:#fff;
+		}
+	</style>
+</head>
+<body>
+	<div id="main_container">
+		<header>
+			<h1>Resizable and dragable circle</h1>
+		</header>
+		<div id="content_container">
+			<div id="circle_container">
+				
+			</div>
+		</div>
+		<footer></footer>
+	</div>
+
+	<script type="text/javascript" charset="utf-8"
+	        src="http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js">
+	</script>
+	
+	<script>
+		YUI().use("base","node", function(Y) {
+
+			function SelectorCircle(config) {
+
+				SelectorCircle.superclass.constructor.apply(this, arguments);
+
+			}
+
+			SelectorCircle.NAME = "SelectorCircle";
+
+			SelectorCircle.ATTRS = {
+				root_node : {
+					value : null
+				},
+				initial_radius : {
+					value : 15
+				},
+				resizable : {
+					value : true
+				},
+				dragable : {
+					value : true
+				},
+				hover_class : {
+					value : 'hover'
+				},
+				dragging_class : {
+					value : 'dragging'
+				},
+				resizing_class : {
+					value : 'resizing'
+				}
+			}
+
+			Y.extend(SelectorCircle, Y.Base, {
+				show : function() {
+					var root_node = this.get('root_node');
+					
+					if(root_node) {
+						var circle_node = root_node.one('.circle-selector');
+
+						if(circle_node) {
+							circle_node.setStyle('display','block');
+						}
+					} else {
+						Y.log('No root node was found in the module configuration','error','selector-circle');
+					}
+				}
+			});
+
+			var selector_circle = new SelectorCircle({
+				root_node : Y.one('#circle_container')
+			});
+			
+			selector_circle.show();
+			
+		});
+	</script>
+</body>
+</html>
