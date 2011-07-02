@@ -111,7 +111,8 @@
 					
 					root_node.append('<div class="' + default_class + '"></div>');
 					
-					var circle_node = root_node.one('.' + default_class);
+					var circle_node = root_node.one('.' + default_class),
+					    that        = this;
 					
 					if(circle_node) {
 						circle_node.setStyle('height',this.get('initial_radius')*2);
@@ -121,12 +122,24 @@
 						if(Y.Lang.isObject(this.get('initial_xy'))) {
 							circle_node.setXY(this.get('initial_xy'));
 						}
-						
-						circle_node.on('mouseover',function() {
-							console.log('hovering');
+
+						circle_node.on('mousemove',function(e) {
+							var distance = that.getDistanceFromCentroid(that.offsetParentXY([e.pageX,e.pageY]));
+							
+							if(distance < 15) {
+								e.target.addClass(that.get('dragable_class'));
+								e.target.removeClass(that.get('resizable_class'));
+							} else {
+								e.target.addClass(that.get('resizable_class'));
+								e.target.removeClass(that.get('dragable_class'));
+							}
 						});
-						circle_node.on('mouseout',function() {
-							console.log('not hovering');
+						
+						circle_node.on('mouseout',function(e) {
+							var distance = that.getDistanceFromCentroid(that.offsetParentXY([e.pageX,e.pageY]));
+							
+							e.target.removeClass(that.get('resizable_class'));
+							e.target.removeClass(that.get('dragable_class'));
 						});
 					}
 					
@@ -151,10 +164,20 @@
 				getCentroid : function() {
 					var root_node        = this.get('root_node'),
 					    circle_node      = this.circle_node,
-					    parent_offset_xy = [circle_node.getX()-root_node.getX(),circle_node.getY()-root_node.getY()],
+					    parent_offset_xy = this.offsetParentXY(circle_node.getXY()),
 					    half_node_width  = circle_node.get('offsetWidth')/2;
 					
-					return [(parent_offset_xy[0]+half_node_width)-this.get('border_width'),(parent_offset_xy[1]+half_node_width)-this.get('border_width')];
+					return [(parent_offset_xy[0]+half_node_width),(parent_offset_xy[1]+half_node_width)];
+				},
+				getDistanceFromCentroid : function(xy) {
+					
+					var centroid_xy = this.getCentroid();
+
+					return Math.sqrt(Math.pow(centroid_xy[0]-xy[0], 2.0) + Math.pow(centroid_xy[1]-xy[1], 2.0));
+				},
+				offsetParentXY : function(xy) {
+					var root_node = this.get('root_node');
+					return [xy[0]-root_node.getX(),xy[1]-root_node.getY()];
 				}
 			});
 
