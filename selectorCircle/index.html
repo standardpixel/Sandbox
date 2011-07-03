@@ -26,6 +26,7 @@
 			width:900px;
 			background-color:#fff;
 			position:relative;
+			overflow:auto;
 		}
 		
 		.circle-selector {
@@ -73,6 +74,17 @@
 
 			}
 
+			/*
+			*  Privates
+			*/
+			function dragDirection(xy) {
+				var width  = this.circle_node.get('offsetWidth'),
+				    height = this.circle_node.get('offsetHeight');
+				
+				console.log(width,height,this.getDistanceFromCentroid(xy));
+				return this.circle_node;
+			}
+
 			SelectorCircle.NAME = "SelectorCircle";
 
 			SelectorCircle.ATTRS = {
@@ -111,6 +123,9 @@
 				}
 			}
 
+			/*
+			*  Publics
+			*/
 			Y.extend(SelectorCircle, Y.Base, {
 				circle_node : null,
 				create : function() {
@@ -141,6 +156,23 @@
 								e.target.addClass(that.get('resizable_class'));
 								e.target.removeClass(that.get('draggable_class'));
 							}
+							
+							if(that.circle_node.hasClass(that.get('resizing_class'))) {
+								that.circle_node.setStyle('width',(distance*2) + 'px');
+								that.circle_node.setStyle('height',(distance*2) + 'px');
+							}
+						});
+						
+						root_node.on('mousedown',function(e) {
+							console.log(dragDirection.apply(that,[that.offsetParentXY([e.pageX,e.pageY])]));
+							if(e.target.hasClass(that.get('resizable_class'))) {
+								that.circle_node.addClass(that.get('resizing_class'));
+							}
+						});
+						
+						root_node.on('mouseup',function(e) {
+							console.log(dragDirection.apply(that,[that.offsetParentXY([e.pageX,e.pageY])]));
+							that.circle_node.removeClass(that.get('resizing_class'));
 						});
 						
 						circle_node.on('mouseout',function(e) {
