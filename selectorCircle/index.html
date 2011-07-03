@@ -67,6 +67,8 @@
 	
 	<script>
 		YUI().use("base","node", function(Y) {
+			
+			var last_updated_centroid = null;
 
 			function SelectorCircle(config) {
 
@@ -81,7 +83,7 @@
 				var width  = this.circle_node.get('offsetWidth'),
 				    height = this.circle_node.get('offsetHeight');
 				
-				console.log(width,height,this.getDistanceFromCentroid(xy));
+				//console.log(width,height,this.getDistanceFromCentroid(xy));
 				return this.circle_node;
 			}
 
@@ -147,24 +149,32 @@
 						}
 
 						root_node.on('mousemove',function(e) {
-							var distance = that.getDistanceFromCentroid(that.offsetParentXY([e.pageX,e.pageY]));
+							var distance = that.getDistanceFromCentroid(that.offsetParentXY([e.pageX,e.pageY]),{get_updated_centroid:false});
 							
-							if(distance < 17) {
-								e.target.addClass(that.get('draggable_class'));
-								e.target.removeClass(that.get('resizable_class'));
-							} else if(distance < 20) {
-								e.target.addClass(that.get('resizable_class'));
-								e.target.removeClass(that.get('draggable_class'));
+							if(!that.circle_node.hasClass(that.get('resizing_class'))) {
+								if(distance < that.circle_node.get('offsetWidth')-that.get('border_width')*8) {
+									e.target.addClass(that.get('draggable_class'));
+									e.target.removeClass(that.get('resizable_class'));
+								} else if(distance < (that.circle_node.get('offsetWidth'))) {
+									e.target.addClass(that.get('resizable_class'));
+									e.target.removeClass(that.get('draggable_class'));
+								}
 							}
 							
 							if(that.circle_node.hasClass(that.get('resizing_class'))) {
-								that.circle_node.setStyle('width',(distance*2) + 'px');
-								that.circle_node.setStyle('height',(distance*2) + 'px');
+								that.circle_node.setStyle('width',(distance) + 'px');
+								that.circle_node.setStyle('height',(distance) + 'px');
 							}
+							//console.log('distance from center',distance,e);
+							
+							if(root_node.one('#center_thingy')) {
+								var cent = root_node.one('#center_thingy')._node;
+								cent.parentNode.removeChild(cent);
+							}
+							//root_node.append('<div id="center_thingy" style="width:4px;height:4px;background-color:red;position:absolute;top:'+(that.getCentroid()[0]-2)+'px;left:'+(that.getCentroid()[1]-4)+'px;"></div>');
 						});
 						
 						root_node.on('mousedown',function(e) {
-							console.log(dragDirection.apply(that,[that.offsetParentXY([e.pageX,e.pageY])]));
 							if(e.target.hasClass(that.get('resizable_class'))) {
 								that.circle_node.addClass(that.get('resizing_class'));
 							}
@@ -173,6 +183,8 @@
 						root_node.on('mouseup',function(e) {
 							console.log(dragDirection.apply(that,[that.offsetParentXY([e.pageX,e.pageY])]));
 							that.circle_node.removeClass(that.get('resizing_class'));
+							e.target.removeClass(that.get('resizable_class'));
+							e.target.removeClass(that.get('draggable_class'));
 						});
 						
 						circle_node.on('mouseout',function(e) {
@@ -207,13 +219,19 @@
 					    parent_offset_xy = this.offsetParentXY(circle_node.getXY()),
 					    half_node_width  = circle_node.get('offsetWidth')/2;
 					
-					return [(parent_offset_xy[0]+half_node_width),(parent_offset_xy[1]+half_node_width)];
-				},
-				getDistanceFromCentroid : function(xy) {
+					last_updated_centroid = [(parent_offset_xy[0]+half_node_width),(parent_offset_xy[1]+half_node_width)];
 					
-					var centroid_xy = this.getCentroid();
+					return last_updated_centroid;
+				},
+				getDistanceFromCentroid : function(xy,options) {
+					
+					var centroid_xy = last_updated_centroid;
+					
+					if((options && options.get_updated_centroid !== false) || !last_updated_centroid) {
+						centroid_xy = this.getCentroid();
+					}
 
-					return Math.sqrt(Math.pow(centroid_xy[0]-xy[0], 2.0) + Math.pow(centroid_xy[1]-xy[1], 2.0));
+					return Math.sqrt(Math.round(Math.pow(centroid_xy[0]-xy[0], 2.0)) + Math.round(Math.pow(centroid_xy[1]-xy[1], 2.0)));
 				},
 				offsetParentXY : function(xy) {
 					var root_node = this.get('root_node');
@@ -226,7 +244,7 @@
 			});
 			
 			selector_circle.show();
-			console.log(selector_circle.getCentroid());
+			//console.log(selector_circle.getCentroid());
 		});
 	</script>
 </body>
