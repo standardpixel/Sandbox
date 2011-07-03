@@ -131,13 +131,13 @@
 							circle_node.setXY(this.get('initial_xy'));
 						}
 
-						circle_node.on('mousemove',function(e) {
+						root_node.on('mousemove',function(e) {
 							var distance = that.getDistanceFromCentroid(that.offsetParentXY([e.pageX,e.pageY]));
 							
-							if(distance < 15) {
+							if(distance < 17) {
 								e.target.addClass(that.get('draggable_class'));
 								e.target.removeClass(that.get('resizable_class'));
-							} else {
+							} else if(distance < 20) {
 								e.target.addClass(that.get('resizable_class'));
 								e.target.removeClass(that.get('draggable_class'));
 							}
