@@ -40,11 +40,11 @@
 			border-radius: 999px;
 		}
 		
-		.resizable {
+		.resizable, .resizing {
 			cursor:pointer;cursor:hand;
 		}
 		
-		.draggable {
+		.draggable, .dragging {
 			cursor:move;
 		}
 	</style>
@@ -69,7 +69,8 @@
 	<script>
 		YUI().use("base","node", function(Y) {
 			
-			var last_updated_centroid = null;
+			var last_updated_centroid = null,
+			    last_xy_position      = null;
 
 			function SelectorCircle(config) {
 
@@ -166,6 +167,12 @@
 								that.circle_node.setStyle('width',(distance) + 'px');
 								that.circle_node.setStyle('height',(distance) + 'px');
 							}
+							
+							if(that.circle_node.hasClass(that.get('dragging_class'))) {
+								
+								that.circle_node.setX(e.pageX-(that.circle_node.get('offsetWidth')/2));
+								that.circle_node.setY(e.pageY-(that.circle_node.get('offsetWidth')/2));
+							}
 							//console.log('distance from center',distance,e);
 							
 							if(root_node.one('#center_thingy')) {
@@ -178,14 +185,25 @@
 						root_node.on('mousedown',function(e) {
 							if(e.target.hasClass(that.get('resizable_class'))) {
 								that.circle_node.addClass(that.get('resizing_class'));
+								e.target.addClass(that.get('resizing_class'));
+							}
+							if(e.target.hasClass(that.get('draggable_class'))) {
+								that.circle_node.addClass(that.get('dragging_class'));
+								e.target.addClass(that.get('dragging_class'));
 							}
 						});
 						
 						root_node.on('mouseup',function(e) {
-							console.log(dragDirection.apply(that,[that.offsetParentXY([e.pageX,e.pageY])]));
+							last_xy_position = null;
+							
 							that.circle_node.removeClass(that.get('resizing_class'));
+							that.circle_node.removeClass(that.get('dragging_class'));
 							e.target.removeClass(that.get('resizable_class'));
 							e.target.removeClass(that.get('draggable_class'));
+							e.target.removeClass(that.get('resizing_class'));
+							e.target.removeClass(that.get('dragging_class'));
+							
+							that.getCentroid();
 						});
 						
 						circle_node.on('mouseout',function(e) {
@@ -214,7 +232,7 @@
 						Y.log('No root node was found in the module configuration','error','selector-circle');
 					}
 				},
-				getCentroid : function() {
+				getCentroid : function(override_x_y) {
 					var root_node        = this.get('root_node'),
 					    circle_node      = this.circle_node,
 					    parent_offset_xy = this.offsetParentXY(circle_node.getXY()),
