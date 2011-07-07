@@ -154,11 +154,15 @@
 							var distance = that.getDistanceFromCentroid(that.offsetParentXY([e.pageX,e.pageY]),{get_updated_centroid:false});
 							
 							if(!that.circle_node.hasClass(that.get('resizing_class'))) {
-								if(distance < that.circle_node.get('offsetWidth')-that.get('border_width')*8) {
+							
+								if(distance < (that.circle_node.get('offsetWidth')-that.get('border_width'))/2) {
 									e.target.addClass(that.get('draggable_class'));
 									e.target.removeClass(that.get('resizable_class'));
-								} else if(distance < (that.circle_node.get('offsetWidth'))) {
+								} else if(distance < (that.circle_node.get('offsetWidth') /2)) {
 									e.target.addClass(that.get('resizable_class'));
+									e.target.removeClass(that.get('draggable_class'));
+								} else {
+									e.target.removeClass(that.get('resizable_class'));
 									e.target.removeClass(that.get('draggable_class'));
 								}
 							}
