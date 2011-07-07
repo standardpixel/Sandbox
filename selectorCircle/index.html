@@ -27,20 +27,21 @@
 			background-color:#fff;
 			position:relative;
 			overflow:auto;
+			background:url(map.png);
 		}
 		
 		.circle-selector {
 			width:15px;
 			height:15px;
-			border:solid 3px #0063DC;
-			background-color:rgba(68, 68, 68, .5);
-			moz-border-radius:50%;
-			webkit-border-radius:50%;
-			border-radius:50%;
+			border:solid 8px rgba(68, 68, 68, .4);
+			background-color:rgba(0, 100, 220, .5);
+			-webkit-border-radius: 999px;
+			-moz-border-radius: 999px;
+			border-radius: 999px;
 		}
 		
 		.resizable {
-			cursor:nw-resize;
+			cursor:pointer;cursor:hand;
 		}
 		
 		.draggable {
@@ -121,7 +122,7 @@
 					value : 'resizing'
 				},
 				border_width: {
-					value : 3
+					value : 8
 				}
 			}
 
