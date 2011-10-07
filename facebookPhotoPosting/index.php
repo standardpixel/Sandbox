@@ -74,7 +74,7 @@ if($cookie) {
 		      <script src="http://connect.facebook.net/en_US/all.js"></script>
 		      <script>
 			FB.init({ 
-				appId:'120831071331992',  
+				appId:'120831071331992',  cookie: true,
 				status:true, xfbml:true
 			});
 			
