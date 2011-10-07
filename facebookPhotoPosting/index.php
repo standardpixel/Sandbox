@@ -74,8 +74,8 @@ if($cookie) {
 		      <script src="http://connect.facebook.net/en_US/all.js"></script>
 		      <script>
 			FB.init({ 
-				appId:'120831071331992', cookie:true, 
-				status:true, xfbml:true 
+				appId:'120831071331992',  
+				status:true, xfbml:true
 			});
 			
 			FB.Event.subscribe('auth.login', function(response) {
@@ -120,6 +120,7 @@ if($cookie) {
 			<h2>As a</h2>
 			<button value="feed">Feed</button>
 			<button value="note">Note</button>
+			<button value="photo">Photo</button>
 			
 		</section>
 	</div>
@@ -133,7 +134,7 @@ if($cookie) {
 	<?if ($cookie) { ?>
 	<script src="http://yui.yahooapis.com/3.4.1/build/yui/yui.js"></script>
 	<script>
-		YUI().use('node', 'event', 'selector-css3', function (Y) {
+		YUI().use('node', 'event', 'selector-css3', 'io', 'json', function (Y) {
 			
 			var icon         = 'http://farm3.static.flickr.com/2690/buddyicons/24111544@N00.jpg',
 			    post_types   = {},
@@ -147,24 +148,27 @@ if($cookie) {
 			post_types.photo1 = {
 				message     : 'Orangy Burbon',
 				picture     : 'http://farm6.static.flickr.com/5215/5409329204_02821fc0a9_m.jpg',
+				flickr_id   : '5409329204_02821fc0a9_m',
 				description : 'I enjoyed it',
 				caption     : 'This was the first ever cocktail created in the flickr saloon. It contains simple syrup, bourbon, bitters, and ice. It is topped with a slice of orange. This was created by the baby stealing jerk named Jude. This was back when we were on the 9th floor using a bar which was made out of cardboard. It was constructed out of an old bike shipping box which we had in the office.',
 				link        : 'http://www.flickr.com/photos/standardpistol/5409329204/',
-				actions     : {'name':'StandardPistol\'s photostream','link':'http://http://www.flickr.com/photos/standardpistol/'}
+				actions     : {'name':'photostream','link':'http://http://www.flickr.com/photos/standardpistol/'}
 			};
 			
 			post_types.photo2 = {
 				message     : 'Coffee',
 				picture     : 'http://farm6.static.flickr.com/5213/5409336876_45e74d723c_m.jpg',
+				flickr_id   : '5409336876_45e74d723c_m',
 				description : 'I am sharing this for some reason',
 				caption     : 'Sitting in a cafe and drinking coffee',
 				link        : 'http://www.flickr.com/photos/standardpistol/5409336876/',
-				actions     : {'name':'StandardPistol\'s photostream','link':'http://http://www.flickr.com/photos/standardpistol/'}
+				actions     : {'name':'photostream','link':'http://http://www.flickr.com/photos/standardpistol/'}
 			};
 			
 			post_types.set1 = {
 				message     : 'FlickrHQ flickr set',
-				picture     : 'http://farm5.static.flickr.com/4001/4359342967_f1623deebe_s.jpg',
+				picture     : 'http://farm5.static.flickr.com/4001/4359342967_f1623deebe_m.jpg',
+				flickr_id   : '4359342967_f1623deebe_m',
 				description : 'Some pretty goofy pictures',
 				caption     : 'Pictures takes around FlickrHQ',
 				link        : 'http://www.flickr.com/photos/standardpistol/sets/72157623440865020/',
@@ -218,6 +222,25 @@ if($cookie) {
 				FB.api('/me/notes', 'post', item_object, handleResponse);
 			}
 			
+			function sharePhoto(item) {
+				var item_object = Y.clone(post_types[item]);
+				
+				Y.on('io:success',function(id,e) {
+					var data = Y.JSON.parse(e.responseText);
+					
+					if(data) {
+						setStatusMessage('Post successful (id: '+data.flickr_id+')');
+					} else {
+						setStatusMessage('There was an error uploading this file. See browser console for more info');
+						console.error(e);
+					}
+					
+					toggleLoading();
+				});
+				
+				Y.io('upload_photo.php?id=' + item_object.flickr_id + '&message=' + item_object.caption);
+			}
+			
 			/*
 			*  Setup events
 			*/
@@ -244,6 +267,11 @@ if($cookie) {
 					case 'note':
 						toggleLoading()
 						shareNote(item);
+					break;
+					
+					case 'photo':
+						toggleLoading()
+						sharePhoto(item);
 					break;
 				}
 			});
