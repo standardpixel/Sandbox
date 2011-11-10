@@ -1,22 +1,113 @@
 (function() {
 	
 	window.SM = function(config) {
-		this._state = config;
+		this._initial_config = config;
+		
+		initAll.apply(this);
 	}
 	
-	function isArray(it) {
-        return Object.prototype.toString.call(it) === "[object Array]";
+	function logError(msg) {
+		if(window.console && console.error) {
+			console.error(msg);
+		} else if(window.console && console.log) {
+			console.log('Error:' + msg);
+		}
+	}
+	
+	function isArray(arg) {
+        return Object.prototype.toString.call(arg) === "[object Array]";
     }
+
+	function isObject(arg) {
+        return Object.prototype.toString.call(arg) === "[object Object]";
+    }
+
+	function isString(arg) {
+        return Object.prototype.toString.call(arg) === "[object String]";
+    }
+
+	function initDataItems() {
+		
+		var items = this._initial_config;
+		
+		for(var i in items) {
+			
+			if(items.hasOwnProperty(i)) {
+				var item = items[i];
+
+				if(isObject(item)) {
+
+					if(item.value) {
+						this._dataItems[i] = item.value;
+						
+						if(item.validator) {
+							this._validators[i] = item.validator;
+						}
+					} else {
+						logError('Data item "'+i+'" was passed without a "value" property');
+					}
+
+				} else {
+					if(isString(item)) {
+						this._dataItems[i] = item;
+					} else {
+						logError('Data item "'+i+'" needs to either be a string or object containing at least a value property');
+					}
+				}
+			}
+			
+		}
+		
+	}
+	
+	function initAll() {
+		
+		initDataItems.apply(this);
+		
+	}
 	
 	SM.prototype = {
 		
 		name : 'SimpleModel',
 		
+		_initial_config : {
+			
+		},
+		
 		_subscribers : {
 			
 		},
 		
-		_state : {
+		_validators : {
+			
+		},
+		
+		_dataItems : {
+			
+		},
+		
+		get : function(key) {
+			
+			return _dataItems[key];
+			
+		},
+		
+		set : function(key,value) {
+			
+			var validator = this._validators[key];
+			
+			if(validator) {
+				if(validator(value)) {
+					this._dataItems[key]=value;
+				}
+			} else {
+				this._dataItems[key]=value;
+			}
+			
+			this.run(key,{
+				previous : this._dataItems[key],
+				current  : value
+			});
 			
 		},
 		
@@ -26,7 +117,7 @@
 				key       : key,
 				callback  : callback,
 				scope     : scope,
-				args : args
+				args      : args
 			};
 			
 			if(this._subscribers[key]) {

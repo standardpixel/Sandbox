@@ -19,11 +19,23 @@
 		        //the css variable will be the text
 		        //of the some/module.css file.
 		
-			var sm = new SM({poop:'poop'});
+			var sm = new SM({
+				poop:'poop',
+				taco: {
+					value : 'cheese',
+					validator : function(value) {
+						return true;
+					}
+				}
+			});
 			
+			sm.when('poop',function() {
+				console.log('--->',arguments);
+			});
 			
+			sm.set('poop','poo');
 			
-			sm.run('poop');
+			console.log(sm);
 		    }
 		);
 	</script>
