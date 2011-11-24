@@ -1,0 +1,48 @@
+body {
+	font-family:arial, helvetica;
+} 
+div.post{
+	opacity:.7;
+	-webkit-transition: opacity .5s linear;
+	-mos-transition: opacity .5s linear;
+	-o-transition: opacity .5s linear;
+	transition: opacity .5s linear;
+	width:150px;
+	height:150px;
+	overflow:hidden;
+	border:solid 1px #ddd;
+	display:inline-block;
+	margin:0 10px 10px 0;
+	position:relative;
+	cursor: pointer;
+	cursor: hand;
+} 
+div.post:hover{
+	opacity:1;
+}
+div.photo{
+	float:left;
+}
+div.photo.no-photo{
+	padding:3px;
+	font-size:11px;
+	color:#333;
+}
+div.info{
+	position:absolute;
+	bottom:0px;left:0px;right:0px;
+	background-color:#000;
+	color:#fff;
+	opacity:.7;
+	padding:3px;
+	font-size:11px;
+}
+div.info h3{
+	font-weight:bolder;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+}
+div.info:hover h3{
+	white-space:normal;
+}
