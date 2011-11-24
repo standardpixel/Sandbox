@@ -47,7 +47,7 @@
 				$out = $out . '<div class="' . $options['photo_class'] . '"></div>';
 			}
 			
-			$out = $out . '<div class="' . $options['info_class'] . '"><div style="font-weight:bolder;">' . $item->get_title() . '</div><div>' . $item->get_date() . '</div></div>';
+			$out = $out . '<div class="' . $options['info_class'] . '"><h3>' . $item->get_title() . '</h3><span>' . $item->get_date('F jS') . '</span></div>';
 			
 		$out = $out . '</div>';
 		
@@ -73,6 +73,9 @@
 		div.post{
 			opacity:.7;
 			-webkit-transition: opacity .5s linear;
+			-mos-transition: opacity .5s linear;
+			-o-transition: opacity .5s linear;
+			transition: opacity .5s linear;
 			width:150px;
 			height:150px;
 			overflow:hidden;
@@ -95,6 +98,15 @@
 			opacity:.7;
 			padding:3px;
 			font-size:11px;
+		}
+		div.info h3{
+			font-weight:bolder;
+			white-space:nowrap;
+			overflow:hidden;
+			text-overflow:ellipsis;
+		}
+		div.info:hover h3{
+			white-space:normal;
 		}
 	</style>
 </head>
