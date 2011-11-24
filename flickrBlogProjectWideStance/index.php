@@ -44,7 +44,7 @@
 			} elseif($count > 0) {
 				$out = $out . '<div class="' . $options['photo_class'] . '" style="background:url(' . squarify($photos[0],'m') . ') 50% 50%;width:150px;height:150px;"></div>';
 			} else {
-				$out = $out . '<div class="' . $options['photo_class'] . '"></div>';
+				$out = $out . '<div class="' . $options['photo_class'] . ' no-photo">' . strip_tags($content) . '</div>';
 			}
 			
 			$out = $out . '<div class="' . $options['info_class'] . '"><h3>' . $item->get_title() . '</h3><span>' . $item->get_date('F jS') . '</span></div>';
@@ -83,12 +83,19 @@
 			display:inline-block;
 			margin:0 10px 10px 0;
 			position:relative;
+			cursor: pointer;
+			cursor: hand;
 		} 
 		div.post:hover{
 			opacity:1;
 		}
 		div.photo{
 			float:left;
+		}
+		div.photo.no-photo{
+			padding:3px;
+			font-size:11px;
+			color:#333;
 		}
 		div.info{
 			position:absolute;
