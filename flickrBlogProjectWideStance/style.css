@@ -1,8 +1,41 @@
 body {
 	font-family:arial, helvetica;
 } 
+#main_container {
+	margin:10px auto 0 auto;
+	width:1024px;
+	/*border:solid 1px red;*/
+}
+header{
+	background:url('flickblog_logo.gif') top left no-repeat;
+	height:50px;
+	text-align:right;
+}
+header h1{display:none;}
+p{
+	margin-bottom:10px;
+	font-size:15px;
+}
+div.entry-date{
+	margin-bottom:10px;
+	font-size:15px;
+	color:#333;
+}
+h2{
+	margin-bottom:10px;
+	font-size:20px;
+	color:#333;
+	font-weight:bolder;
+}
+h2 a{
+	color:#333;
+	text-decoration:none;
+}
+div.post-content{
+	margin-bottom:10px;
+}
 div.post{
-	opacity:.7;
+	/*opacity:.7;*/
 	-webkit-transition: opacity .5s linear;
 	-mos-transition: opacity .5s linear;
 	-o-transition: opacity .5s linear;
@@ -12,7 +45,7 @@ div.post{
 	overflow:hidden;
 	border:solid 1px #ddd;
 	display:inline-block;
-	margin:0 10px 10px 0;
+	margin:0 15px 15px 0;
 	position:relative;
 	cursor: pointer;
 	cursor: hand;
@@ -27,6 +60,7 @@ div.photo.no-photo{
 	padding:3px;
 	font-size:11px;
 	color:#333;
+	text-shadow: 0.1em 0.1em 0.2em #0259C4;
 }
 div.info{
 	position:absolute;
@@ -45,4 +79,34 @@ div.info h3{
 }
 div.info:hover h3{
 	white-space:normal;
+}
+
+body, p, div{
+font-size:13px;
+color:#333;
+}
+.entry-date{
+position:absolute;
+right:135px;
+text-align:right;
+color:#888 !important;
+}
+
+header{
+margin-bottom:15px;
+border-bottom:dotted #ddd 1px;
+}
+
+header a {
+color:#0063DC;
+font-weight:bolder;
+text-decoration:none;
+font-size:13px;
+margin-left:10px;
+}
+
+.post-content{
+padding-bottom:10px;
+margin-bottom:15px !important;
+border-bottom:dotted 1px #ddd;
 }
