@@ -22,7 +22,7 @@
 			<a href="#">Flickr.com</a>
 			<a href="#">Code Blog</a>
 			<a href="#">Explore</a>
-			<a href="#">Community Events <div style="color:#fff;background-color:#FF0084;padding:3px;display:inline-block;-webkit-border-radius:999px;font-size:12px;">30</div></a>
+			<a href="#">Community Events <div style="color:#fff;background-color:#FF0084;padding:3px;display:inline-block;-webkit-border-radius:999px;font-size:12px;min-width:13px;min-height:13px;text-align:center;">23</div></a>
 			
 		</header>
 		<div id="content_container">
@@ -60,7 +60,7 @@
 				</a></p>
 
 				<p class="sixforty"><a href="http://www.flickr.com/photos/kendra-jane/2052985559/" title="My favorite cranberry sauce by kendra-jane, on Flickr">
-					<img src="http://farm3.static.flickr.com/2046/2052985559_f2eb5ac971_b.jpg" width="504px" height="337px" alt="My favorite cranberry sauce" border="0" />
+					<img src="http://farm3.static.flickr.com/2046/2052985559_f2eb5ac971.jpg" width="504px" height="337px" alt="My favorite cranberry sauce" border="0" />
 				</a>
 				&nbsp;&nbsp;
 				<a href="http://www.flickr.com/photos/cookincanuck/4114219808/" title="Maple &amp; Brown Sugar Cranberry Sauce Recipe by CookinCanuck, on Flickr">
@@ -113,8 +113,22 @@
 				<?= writePost($item); ?>
 
 			<?}?>
+			<? foreach ($feed->get_items() as $item) { ?>
+
+				<?= writePost($item); ?>
+
+			<?}?>
+			<? foreach ($feed->get_items() as $item) { ?>
+
+				<?= writePost($item); ?>
+
+			<?}?>
+			
+			<div><a href="#">I need even more!</a></div>
 		</div>
-		<footer></footer>
+		<footer>
+			<p>&nbsp;</p>
+		</footer>
 	</div>
 
 	<script type="text/javascript" charset="utf-8"

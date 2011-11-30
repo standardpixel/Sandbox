@@ -1,9 +1,14 @@
 body {
 	font-family:arial, helvetica;
 } 
+a{
+	color:#0063DC;
+	text-decoration:none;
+}
 #main_container {
 	margin:10px auto 0 auto;
 	width:1024px;
+	position:relative;
 	/*border:solid 1px red;*/
 }
 header{
@@ -87,13 +92,13 @@ color:#333;
 }
 .entry-date{
 position:absolute;
-right:135px;
+right:0px;
 text-align:right;
 color:#888 !important;
 }
 
 header{
-margin-bottom:15px;
+margin-bottom:20px;
 border-bottom:dotted #ddd 1px;
 }
 
