@@ -45,11 +45,26 @@ div.post{
 	overflow:hidden;
 	border:solid 1px #ddd;
 	display:inline-block;
-	margin:0 15px 15px 0;
+	margin:0 18px 18px 0;
 	position:relative;
 	cursor: pointer;
 	cursor: hand;
 } 
+div.post:nth-child(10){
+	margin-right:0px;
+}
+div.post:nth-child(16){
+	margin-right:0px;
+}
+div.post:nth-child(22){
+	margin-right:0px;
+}
+div.post:nth-child(28){
+	margin-right:0px;
+}
+div.post:nth-child(34){
+	margin-right:0px;
+}
 div.photo{
 	float:left;
 }
