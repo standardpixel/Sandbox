@@ -31,7 +31,7 @@
 			<div class="post-content">
 				<div id="post-31101" class="entry">
 
-								<div class="entry-content">
+				<div class="entry-content">
 				<p class="sixforty"><a href="http://www.flickr.com/photos/prescod/1538075613/" title="Brined, High-Roast Turkey by Lily White, on Flickr">
 					<img src="http://farm3.staticflickr.com/2321/1538075613_c9ff98dfaf_b.jpg" alt="Brined, High-Roast Turkey" border="0" />
 				</a></p>
@@ -127,7 +127,21 @@
 			<div><a href="#">I need even more!</a></div>
 		</div>
 		<footer>
-			<p>&nbsp;</p>
+			<p>
+				<ul id="yui_3_4_0_3_1322630764112_105">
+							<li id="yui_3_4_0_3_1322630764112_104"><a href="/change_language.gne?lang=zh-hk&amp;magic_cookie=12bb6729a861c0c74751f2025399dbce" class="image_link" id="lang_zh-hk"><img src="http://l.yimg.com/g/images/spaceout.gif" width="45" height="13" id="langselect_zh-hk" alt="繁體中文"></a></li>
+							<li id="yui_3_4_0_3_1322630764112_109"><a href="/change_language.gne?lang=de-de&amp;magic_cookie=12bb6729a861c0c74751f2025399dbce" id="yui_3_4_0_3_1322630764112_108">Deutsch</a></li>
+							<li id="yui_3_4_0_3_1322630764112_112"><a href="/change_language.gne?lang=en-us&amp;magic_cookie=12bb6729a861c0c74751f2025399dbce" class="selected" id="yui_3_4_0_3_1322630764112_111">English</a></li>
+							<li id="yui_3_4_0_3_1322630764112_115"><a href="/change_language.gne?lang=es-us&amp;magic_cookie=12bb6729a861c0c74751f2025399dbce" id="yui_3_4_0_3_1322630764112_114">Español</a></li>
+							<li id="yui_3_4_0_3_1322630764112_138"><a href="/change_language.gne?lang=fr-fr&amp;magic_cookie=12bb6729a861c0c74751f2025399dbce" id="yui_3_4_0_3_1322630764112_137">Français</a></li>
+							<li id="yui_3_4_0_3_1322630764112_135"><a href="/change_language.gne?lang=ko-kr&amp;magic_cookie=12bb6729a861c0c74751f2025399dbce" class="image_link" id="lang_ko-kr"><img src="http://l.yimg.com/g/images/spaceout.gif" width="23" height="13" id="langselect_ko-kr" alt="한글"></a></li>
+							<li id="yui_3_4_0_3_1322630764112_131"><a href="/change_language.gne?lang=it-it&amp;magic_cookie=12bb6729a861c0c74751f2025399dbce" id="yui_3_4_0_3_1322630764112_133">Italiano</a></li>
+							<li id="yui_3_4_0_3_1322630764112_129"><a href="/change_language.gne?lang=pt-br&amp;magic_cookie=12bb6729a861c0c74751f2025399dbce" id="yui_3_4_0_3_1322630764112_128">Português</a></li>
+							<li id="yui_3_4_0_3_1322630764112_124"><a href="/change_language.gne?lang=vn-vn&amp;magic_cookie=12bb6729a861c0c74751f2025399dbce" id="yui_3_4_0_3_1322630764112_126">Tiếng Việt</a></li>			
+							<li class="last" id="yui_3_4_0_3_1322630764112_122"><a href="/change_language.gne?lang=id-id&amp;magic_cookie=12bb6729a861c0c74751f2025399dbce" id="yui_3_4_0_3_1322630764112_121">Bahasa Indonesia</a></li>					</ul>
+			</p>
+			<p>Copyright © 2011 Yahoo! Inc. All rights reserved.</p>
+			<p>Powered by WordPress</p>
 		</footer>
 	</div>
 
