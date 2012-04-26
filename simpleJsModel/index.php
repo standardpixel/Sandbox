@@ -20,7 +20,7 @@
 		        //of the some/module.css file.
 		
 			var sm = new SM({
-				poop:'poop',
+				cheese:'cheddar',
 				taco: {
 					value : 'cheese',
 					validator : function(value) {
@@ -29,11 +29,11 @@
 				}
 			});
 			
-			sm.when('poop',function() {
+			sm.when('cheese',function() {
 				console.log('--->',arguments);
 			});
 			
-			sm.set('poop','poo');
+			sm.set('cheese','swiss');
 			
 			console.log(sm);
 		    }
